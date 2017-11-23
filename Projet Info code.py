@@ -4,6 +4,7 @@ from random import *
 paquet_melange = []
 paquet_range= []
 main_joueur1=[]
+pile_de_jeu = [5, 8, 9, 10]
 i = 1
 
 while i < 109 :
@@ -109,7 +110,14 @@ def piocher(paquet, main_joueur, carte_a_piocher): #Tant que n est inférieure a
 		main_joueur.append(carte)
 		n=n+1
 
+def pioche_vide(paquet, pilejeu) :
+    while len(pilejeu) != 1 :
+        paquet.append(pilejeu[0])
+        pilejeu.pop(0)
+    shuffle(paquet)    
+
 initialisation(paquet_melange)
-piocher(paquet_melange, main_joueur1, 7)
-print(main_joueur1)
+pioche_vide(paquet_melange, pile_de_jeu)
+print(pile_de_jeu)
+print(len(paquet_melange))
 
