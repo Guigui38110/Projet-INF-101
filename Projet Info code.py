@@ -2,6 +2,7 @@
 
 from random import *
 
+#Création du paquet rangé avec les chiffres ordonnés
 paquet_melange = []
 paquet_range= []
 i = 1
@@ -10,14 +11,14 @@ while i < 109 :
     paquet_range.append(i)
     i += 1
 
-def initialisation(liste) :
+def initialisation(liste) :  #Mélange de la liste de chiffres rangés pour y placer dans un nouvelle liste mélangée
     i = 0
     
     while i < 109 :
         liste.insert(randint(0,len(liste)), i)
         i += 1
 
-def couleur(indice) :
+def couleur(indice) : #Détermine la couleur en fonction du numéro de la carte piochée
     if 1 <= indice <= 25 :
         return "Rouge"
     if 26 <= indice <= 50 :
@@ -29,7 +30,7 @@ def couleur(indice) :
     if 101 <= indice <= 108 :
         return "Multicolore"
 
-def numero(indice) :
+def numero(indice) : # Permet de renvoyer le numéro (correspondance) "physique" de la carte par rapport au numéro pioché 
     if couleur(indice) == "Multicolore" :
         if 101 <= indice <= 104 :
             return "Joker"
@@ -69,7 +70,7 @@ def numero(indice) :
         if 24 <= indice <= 25 :
             return "Passe le tour"
 
-def texte(indice) :
+def texte(indice) : #Fait la correspondance entre le numéro de la carte piochée et la "vraie" carte 
     a = numero(indice)
     b = couleur(indice)
     if a == "Joker" :
@@ -86,7 +87,7 @@ def texte(indice) :
         x = a, b
     return x
 
-def pioche(liste) :
+def pioche(liste) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
     carte_pioche = randint(1, 108)
     liste.remove(carte_pioche)
     carte_pioche = texte(carte_pioche)
