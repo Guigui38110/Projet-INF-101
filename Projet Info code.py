@@ -4,16 +4,16 @@ from random import *
 paquet_melange = []
 paquet_range= []
 main_joueur1=[]
-i = 0
+i = 1
 
-while i < 108 :
+while i < 109 :
     paquet_range.append(i)
     i += 1
 
 def initialisation(liste) :  #Mélange de la liste de chiffres rangés pour y placer dans un nouvelle liste mélangée
-    i = 0
+    i = 1
     
-    while i < 108 :
+    while i < 109 :
         liste.insert(randint(0,len(liste)), i)
         i += 1
 
@@ -110,6 +110,6 @@ def piocher(paquet, main_joueur, carte_a_piocher): #Tant que n est inférieure a
 		n=n+1
 
 initialisation(paquet_melange)
-piocher(paquet_melange, main_joueur1, 105)
+piocher(paquet_melange, main_joueur1, 7)
 print(main_joueur1)
 
