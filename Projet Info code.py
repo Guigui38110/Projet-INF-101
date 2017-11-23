@@ -5,7 +5,7 @@ from random import *
 #Création du paquet rangé avec les chiffres ordonnés
 paquet_melange = []
 paquet_range= []
-main_joueur=[]
+main_joueur1=[]
 i = 1
 
 while i < 109 :
@@ -34,9 +34,9 @@ def couleur(indice) : #Détermine la couleur en fonction du numéro de la carte 
 def numero(indice) : # Permet de renvoyer le numéro (correspondance) "physique" de la carte par rapport au numéro pioché 
     if couleur(indice) == "Multicolore" :
         if 101 <= indice <= 104 :
-            return "Joker"
+            return 13
         else :
-            return "+4"
+            return 14
     if couleur(indice) == "Vert" :
         indice = indice - 75
     if couleur(indice) == "Jaune" :
@@ -65,42 +65,48 @@ def numero(indice) : # Permet de renvoyer le numéro (correspondance) "physique"
         if 18 <= indice <= 19 :
             return 9
         if 20 <= indice <= 21 :
-            return "+2"
+            return 10
         if 22 <= indice <= 23 :
-            return "Change de sens"
+            return 11
         if 24 <= indice <= 25 :
-            return "Passe le tour"
+            return 12
 
 def texte(indice) : #Fait la correspondance entre le numéro de la carte piochée et la "vraie" carte 
     a = numero(indice)
     b = couleur(indice)
-    if a == "Joker" :
+    if a == 13 :
+        a = "Joker"
         return a
-    if a == "+4" :
+    if a == 14 :
+        a = "+4"
         return a
-    if a == "+2" :
-        x = a, b
-    if a == "Change de sens" :
-        x = a, b
-    if a == "Passe le tour" :
-        x = a, b
+    if a == 10 :
+        a = "+2"
+        x = a + b
+    if a == 11 :
+        a = "Change de sens"
+        x = a + b
+    if a == 12 :
+        a = "Passe le tour"
+        x = a + b
     if 0 <= a <= 9 :
-        x = a, b
+        a = str(a)
+        x = a + b
     return x
 
 def pioche(liste) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
     carte_pioche = randint(1, 108)
     liste.remove(carte_pioche)
-    carte_pioche = texte(carte_pioche)
+    carte_pioche = texte(numero(carte_pioche))
     return carte_pioche #Carte piochée
 
-def piocher (pioche, main_joueur, carte_a_piocher): #Tant que n est inférieure au nombre de carte à piocher, on pioche et on rempli la main du joueur en s'aidant de la fonction "pioche"
+def piocher(paquet, main_joueur, carte_a_piocher): #Tant que n est inférieure au nombre de carte à piocher, on pioche et on rempli la main du joueur en s'aidant de la fonction "pioche"
 	n=0
 	while n < carte_a_piocher:
-		carte=pioche(paquet_melange)
+		carte = pioche(paquet_melange)
 		main_joueur.append(carte)
 		n=n+1
 
-	
-
-
+initialisation(paquet_melange)
+piocher(paquet_melange, main_joueur1, 7)
+print(main_joueur1)
