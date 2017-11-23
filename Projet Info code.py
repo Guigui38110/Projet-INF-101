@@ -5,6 +5,7 @@ from random import *
 #Création du paquet rangé avec les chiffres ordonnés
 paquet_melange = []
 paquet_range= []
+main_joueur=[]
 i = 1
 
 while i < 109 :
@@ -91,4 +92,15 @@ def pioche(liste) : #Permet de piocher une carte et la retire de la liste pour n
     carte_pioche = randint(1, 108)
     liste.remove(carte_pioche)
     carte_pioche = texte(carte_pioche)
-    return carte_pioche
+    return carte_pioche #Carte piochée
+
+def piocher (pioche, main_joueur, carte_a_piocher): #Tant que n est inférieure au nombre de carte à piocher, on pioche et on rempli la main du joueur en s'aidant de la fonction "pioche"
+	n=0
+	while n < carte_a_piocher:
+		carte=pioche(paquet_melange)
+		main_joueur.append(carte)
+		n=n+1
+
+	
+
+
