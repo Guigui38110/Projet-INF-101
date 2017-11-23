@@ -1,5 +1,3 @@
-#PROJET INFO 
-
 from random import *
 
 #Création du paquet rangé avec les chiffres ordonnés
@@ -15,7 +13,7 @@ while i < 108 :
 def initialisation(liste) :  #Mélange de la liste de chiffres rangés pour y placer dans un nouvelle liste mélangée
     i = 0
     
-    while i < 109 :
+    while i < 108 :
         liste.insert(randint(0,len(liste)), i)
         i += 1
 
@@ -95,7 +93,9 @@ def texte(indice) : #Fait la correspondance entre le numéro de la carte pioché
     return x
 
 def pioche(liste) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
-    carte_pioche = randint(0, len(liste)-1)
+    carte_pioche = 200
+    while not(carte_pioche in liste) :
+        carte_pioche = randint(0, len(liste)-1)
     print(carte_pioche)
     liste.remove(carte_pioche)
     carte_pioche = texte(carte_pioche) #Passe dans le convertisseur 
@@ -110,6 +110,6 @@ def piocher(paquet, main_joueur, carte_a_piocher): #Tant que n est inférieure a
 		n=n+1
 
 initialisation(paquet_melange)
-piocher(paquet_melange, main_joueur1, 7)
+piocher(paquet_melange, main_joueur1, 105)
 print(main_joueur1)
 
