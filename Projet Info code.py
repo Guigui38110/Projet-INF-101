@@ -233,6 +233,7 @@ if sens == -1 :
             prochain_joueur = liste_des_joueurs[i]
         else :
             prochain_joueur = liste_des_joueurs[i-1]
+return prochain_joueur
     
 initialisation(paquet_melange)
 gestionjoueur()
