@@ -154,10 +154,35 @@ def choix(main, main_cache) :
     else :
         piocher(paquet_melange, main, 1)
 
+#Gestion des joueurs
 
 
+def gestionjoueur ():
+	i=0
+	j=0
+	nb_joueur=int(input("Entrez le nombre de joueurs s'il vous plaît."))
+	nb_carte=int(input("Entrez le nombre de cartes par joueurs s'il vous plaît."))
+	liste_liste_joueur=[]
+	while i < nb_joueur:
+		liste_vide=[]
+		piocher(paquet_melange, liste_vide, nb_carte)
+		liste_liste_joueur.append(liste_vide)
+		i=i+1
+
+	liste_joueur=[]
+	i=1
+	while i <= nb_joueur:
+		nom=input("Entrez le nom du joueur", i, ".")
+		liste_joueur.append(nom)
+		i=i+1
+
+	dico_joueur={}
+	while j < nb_joueur:
+		dico_joueur[liste_joueur[j]]=liste_liste_joueur[j]
+		j=j+1
+
+	
+	
 initialisation(paquet_melange)
 piocher(paquet_melange, main_joueur1, 5)
-print(choix(main_joueur1, main_cache_joueur1))
-
 
