@@ -6,6 +6,7 @@ paquet_range= []
 main_joueur1=[]
 main_cache_joueur1 = []
 pile_de_jeu = [5, 8, 9, 10]
+sens = 1
 i = 1
 
 while i < 109 :
@@ -181,8 +182,59 @@ def gestionjoueur ():
 		dico_joueur[liste_joueur[j]]=liste_liste_joueur[j]
 		j=j+1
 
-	
-	
+def sens_rotation(liste_des_joueurs, liste_pile, dernier_joueur, parcoureur) :
+    derniere_carte = liste_pile[-1]
+    i = -1 #indice du dernier joueur
+    x = ",,"
+    while x != dernier_joueur :
+            i += 1
+            x = liste_des_joueurs[i]
+if sens == 1 :
+    if numero(derniere_carte) == 11 :
+        sens = sens * (-1)
+        if i = 0 :
+            i = len(liste_des_joueurs) - 1
+            prochain_joueur = liste_des_joueurs[i]
+        else :
+            prochain_joueur = liste_des_joueurs[i-1]
+    elif numero(derniere_carte) == 12 :
+        i += 2
+        if i = len(liste_des_joueurs) :
+            i = 0
+            prochain_joueur = liste_des_joueurs[i]
+        elif i = len(liste_des_joueurs) + 1 :
+            i = 1
+            prochain_joueur = liste_des_joueurs[i]
+    else :
+        if i = len(liste_des_joueurs) - 1 :
+            i = 0
+            prochain_joueur = liste_des_joueurs[i]
+        else :
+            prochain_joueur = liste_des_joueurs[i+1]
+if sens == -1 :
+    if numero(derniere_carte) == 11 :
+        sens = sens * (-1)
+        if i = len(liste_des_joueurs) - 1 :
+            i = 0
+            prochain_joueur = liste_des_joueurs[i]
+        else :
+            prochain_joueur = liste_des_joueurs[i+1]
+    elif numero(derniere_carte) == 12 :
+        i += -2
+        if i = 0 :
+            i = len(liste_des_joueurs) - 2
+            prochain_joueur = liste_des_joueurs[i]
+        elif i = 1 :
+            i = len(liste_des_joueurs) - 1
+            prochain_joueur = liste_des_joueurs[i]
+    else :
+        if i = 0 :
+            i = len(liste_des_joueurs) - 1
+            prochain_joueur = liste_des_joueurs[i]
+        else :
+            prochain_joueur = liste_des_joueurs[i-1]
+    
 initialisation(paquet_melange)
+gestionjoueur()
+dernier_joueur = liste_joueur[0]
 piocher(paquet_melange, main_joueur1, 5)
-
