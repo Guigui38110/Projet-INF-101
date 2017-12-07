@@ -4,6 +4,7 @@ from random import *
 paquet_melange = []
 paquet_range= []
 main_joueur1=[]
+main_cache_joueur1 = []
 pile_de_jeu = [5, 8, 9, 10]
 i = 1
 
@@ -93,12 +94,12 @@ def texte(indice) : #Fait la correspondance entre le numéro de la carte pioché
         x = a + b
     return x
 
-def pioche(liste) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
+def pioche(paquet, main_joueur_cache) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
     carte_pioche = 200
-    while not(carte_pioche in liste) :
-        carte_pioche = randint(0, len(liste)-1)
-    print(carte_pioche)
-    liste.remove(carte_pioche)
+    while not(carte_pioche in paquet) :
+        carte_pioche = randint(0, len(paquet)-1)
+    paquet.remove(carte_pioche)
+    main_joueur_cache.append(carte_pioche)
     carte_pioche = texte(carte_pioche) #Passe dans le convertisseur 
     return carte_pioche #Carte piochée
 
@@ -106,7 +107,7 @@ def piocher(paquet, main_joueur, carte_a_piocher): #Tant que n est inférieure a
 	n=0
 	
 	while n < carte_a_piocher:
-		carte = pioche(paquet_melange)
+		carte = pioche(paquet_melange, main_cache_joueur1)
 		main_joueur.append(carte)
 		n=n+1
 
@@ -116,8 +117,47 @@ def pioche_vide(paquet, pilejeu) :
         pilejeu.pop(0)
     shuffle(paquet)    
 
+def verification(carte) :
+    derniere = pile_de_jeu[-1]
+    if couleur(derniere) == couleur(carte) :
+        return True
+    if numero(derniere) == numero(carte) :
+        return True
+    if texte(derniere) == texte(carte) :
+        return True
+    if texte(carte) == "+4" :
+        return True
+    if texte(carte) == "Joker" :
+        return True
+    return False
+
+def jouable(main) :
+    i = 0
+    drapeau = False
+    while i < len(main) :
+        carte = main[i]
+        if verification(carte) :
+            drapeau = True
+        i += 1
+    if drapeau :
+        return True
+    else :
+        return False
+
+def choix(main, main_cache) :
+    if jouable(main_cache) :
+        print(main)
+        x = int(input("Quelle est l'indice de la carte que vous voulez jouer ? "))
+        while not verification(main_cache[x]) :
+            x = int(input("Quelle est l'indice de la carte que vous voulez jouer ? "))
+        return main[x]
+    else :
+        piocher(paquet_melange, main, 1)
+
+
+
 initialisation(paquet_melange)
-pioche_vide(paquet_melange, pile_de_jeu)
-print(pile_de_jeu)
-print(len(paquet_melange))
+piocher(paquet_melange, main_joueur1, 5)
+print(choix(main_joueur1, main_cache_joueur1))
+
 
