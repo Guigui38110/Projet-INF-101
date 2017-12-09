@@ -21,6 +21,8 @@ def initialisation(liste) :  #Mélange de la liste de chiffres rangés pour y pl
         liste.insert(randint(0,len(liste)), i)
         i += 1
 
+#======================================================================CONVERTISSEUR======================================================================
+
 def couleur(indice) : #Détermine la couleur en fonction du numéro de la carte piochée
     if 1 <= indice <= 25 :
         return " Rouge"
@@ -96,6 +98,8 @@ def texte(indice) : #Fait la correspondance entre le numéro de la carte pioché
         x = a + b
     return x
 
+#Principe de ce convertisseur : assigner un numéro réel à la carte (0, 1, 2, 3, Joker, Passe le tour...) puis une couleur, et concaténer le tout pour obtenir la carte.
+#================================================================================================================================================================
 def pioche(paquet, main_joueur_cache) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
     carte_pioche = 200
     while not(carte_pioche in paquet) :
@@ -119,7 +123,7 @@ def pioche_vide(paquet, pilejeu) :
         pilejeu.pop(0)
     shuffle(paquet)    
 
-def verification(carte) :
+def verification(carte) : #Vérifie si la carte désignée est jouable sur la pile de jeu et renvoie un booléen
     derniere = pile_de_jeu[-1]
     if couleur(derniere) == couleur(carte) :
         return True
@@ -133,7 +137,7 @@ def verification(carte) :
         return True
     return False
 
-def jouable(main) :
+def jouable(main) : #Vérifie si le joueur possède au moins une carte jouable dans sa main
     i = 0
     drapeau = False
     while i < len(main) :
@@ -181,6 +185,7 @@ def gestionjoueur ():
 	while j < nb_joueur:
 		dico_joueur[liste_joueur[j]]=liste_liste_joueur[j]
 		j=j+1
+	return dico_joueur
 
 def sens_rotation(liste_des_joueurs, liste_pile, dernier_joueur, sens) :
     derniere_carte = liste_pile[-1]
@@ -237,8 +242,55 @@ def sens_rotation(liste_des_joueurs, liste_pile, dernier_joueur, sens) :
                 prochain_joueur = liste_des_joueurs[i-1]
     return prochain_joueur
     
+
+def testvictoire (joueur_courant, dico_joueur): 
+	main=dico_joueur[joueur_courant]
+	mainvide=[]
+	if main == mainvide:
+		return True
+	else:
+		return False
+
+def récupérateurnum (liste_joueur, joueur_courant): #Récupère le numéro du joueur courant et retourne ce numéro (place dans la liste)
+	i=0
+	while i < len(liste_joueur):
+		nomjoueur=liste_joueur[i]
+		i=i+1
+		if nomjoueur == joueur_courant:
+			return i 
+
+def tourDeJeu (num_joueur, liste_joueur, dico_joueur, pile_de_jeu, paquet_melange):
+	main=dico_joueur[liste_joueur[num_joueur]]
+	if not jouable(main):
+		print("Aucune carte jouable")
+		indice=pile_de_jeu[-1]
+		if numero(indice)== 14:
+			if len(paquet_melange)< 4:
+				pioche_vide(paquet_melange, pile_de_jeu)
+				piocher(paquet_melange, main, 4)
+			else:
+				piocher(paquet_melange, main, 4)
+		
+		if numero(indice)== 10:
+			if len(paquet_melange)< 2:
+				pioche_vide(paquet_melange, pile_de_jeu)
+				piocher(paquet_melange, main, 2)
+			else:
+				piocher(paquet_melange, main, 2)
+		else : 	
+			piocher(paquet_melange, main, 1)
+
+	elif jouable (main) : 
+		choix (main, main_cache)
+
+	if testvictoire(liste_joueur[num_joueur]):
+		nom=liste_joueur[num_joueur]
+		print("Victoire de:" +str(nom))
+		return 0
+	return dico_joueur, 
+
 initialisation(paquet_melange)
 gestionjoueur()
 dernier_joueur = liste_joueur[0]
-print(sens_rotation(liste_joueur, pile_de_jeu, dernier_joueur, sens))
-
+joueur_courant = liste_joueur[2]
+num_joueur=récupérateurnum(liste_joueur, joueur_courant)
