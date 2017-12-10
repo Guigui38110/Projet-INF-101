@@ -127,7 +127,7 @@ def pioche_vide(paquet, pilejeu) : #Rempli à nouveau la pioche quand celle-ci e
         pilejeu.pop(0)
     shuffle(paquet)    
 
-========================================================================================================================================================================
+#========================================================================================================================================================================
 
 def verification(carte) : #Vérifie si la carte désignée est jouable sur la pile de jeu et renvoie un booléen
     derniere = pile_de_jeu[-1]
