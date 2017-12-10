@@ -1,3 +1,5 @@
+#PROJET INF 101 - Rémy JACQUET et Guillaume PERRIN TOININ - PCMM4 (Décembre 2017)
+
 from random import *
 
 #Création du paquet rangé avec les chiffres ordonnés
