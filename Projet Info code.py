@@ -3,11 +3,11 @@ from random import *
 #Création du paquet rangé avec les chiffres ordonnés
 paquet_melange = []
 paquet_range= []
-main_joueur1=[]
-main_cache_joueur1 = []
-pile_de_jeu = [5, 8, 9, 24]
+pile_de_jeu = [10]
 sens = 1 #Sens de rotation positif
 liste_joueur=[]
+dico_joueur = {}
+dico_cache_joueur = {}
 i = 1
 
 while i < 109 :
@@ -100,20 +100,20 @@ def texte(indice) : #Fait la correspondance entre le numéro de la carte pioché
 
 #Principe de ce convertisseur : assigner un numéro réel à la carte (0, 1, 2, 3, Joker, Passe le tour...) puis une couleur, et concaténer le tout pour obtenir la carte.
 #================================================================================================================================================================
-def pioche(paquet, main_joueur_cache) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
+def pioche(paquet, main_cache_joueur) : #Permet de piocher une carte et la retire de la liste pour ne pas piocher 2 fois la même
     carte_pioche = 200
     while not(carte_pioche in paquet) :
         carte_pioche = randint(0, len(paquet)-1)
     paquet.remove(carte_pioche)
-    main_joueur_cache.append(carte_pioche)
+    main_cache_joueur.append(carte_pioche)
     carte_pioche = texte(carte_pioche) #Passe dans le convertisseur 
     return carte_pioche #Carte piochée
 
-def piocher(paquet, main_joueur, carte_a_piocher): #Tant que n est inférieure au nombre de carte à piocher, on pioche et on rempli la main du joueur en s'aidant de la fonction "pioche"
+def piocher(paquet, main_joueur, main_cache_joueur, carte_a_piocher): #Tant que n est inférieure au nombre de carte à piocher, on pioche et on rempli la main du joueur en s'aidant de la fonction "pioche"
 	n=0
 	
 	while n < carte_a_piocher:
-		carte = pioche(paquet_melange, main_cache_joueur1)
+		carte = pioche(paquet, main_cache_joueur)
 		main_joueur.append(carte)
 		n=n+1
 
@@ -137,7 +137,7 @@ def verification(carte) : #Vérifie si la carte désignée est jouable sur la pi
         return True
     return False
 
-def jouable(main) : #Vérifie si le joueur possède au moins une carte jouable dans sa main
+def jouable(main) : #Vérifie si le joueur possède au moins une carte jouable dans sa main chiffré
     i = 0
     drapeau = False
     while i < len(main) :
@@ -151,41 +151,42 @@ def jouable(main) : #Vérifie si le joueur possède au moins une carte jouable d
         return False
 
 def choix(main, main_cache) :
-    if jouable(main_cache) :
-        print(main)
+    print(main)
+    x = int(input("Quelle est l'indice de la carte que vous voulez jouer ? "))
+    while not verification(main_cache[x]) :
         x = int(input("Quelle est l'indice de la carte que vous voulez jouer ? "))
-        while not verification(main_cache[x]) :
-            x = int(input("Quelle est l'indice de la carte que vous voulez jouer ? "))
-        return main[x]
-    else :
-        piocher(paquet_melange, main, 1)
+    pile_de_jeu.append(main_cache[x])
+    main.remove(main[x])
+    main_cache.remove(main_cache[x])
 
 #Gestion des joueurs
 
 
 def gestionjoueur ():
-	i=0
-	j=0
+	i = 0
+	j = 0
 	nb_joueur=int(input("Entrez le nombre de joueurs s'il vous plaît."))
 	nb_carte=int(input("Entrez le nombre de cartes par joueurs s'il vous plaît."))
-	liste_liste_joueur=[]
+	liste_liste_joueur = []
+	liste_liste_cache_joueur = []
 	while i < nb_joueur:
-		liste_vide=[]
-		piocher(paquet_melange, liste_vide, nb_carte)
+		liste_vide = []
+		liste_vide_cache = []
+		piocher(paquet_melange, liste_vide, liste_vide_cache, nb_carte)
 		liste_liste_joueur.append(liste_vide)
-		i=i+1
+		liste_liste_cache_joueur.append(liste_vide_cache)
+		i = i+1
 
-	i=1
+	i = 1
 	while i <= nb_joueur:
 		nom=input("Entrez le nom du joueur n°"+str(i))
 		liste_joueur.append(nom)
 		i=i+1
 
-	dico_joueur={}
 	while j < nb_joueur:
-		dico_joueur[liste_joueur[j]]=liste_liste_joueur[j]
+		dico_joueur[liste_joueur[j]] = liste_liste_joueur[j]
+		dico_cache_joueur[liste_joueur[j]] = liste_liste_cache_joueur[j]
 		j=j+1
-	return dico_joueur
 
 def sens_rotation(liste_des_joueurs, liste_pile, dernier_joueur, sens) :
     derniere_carte = liste_pile[-1]
@@ -243,15 +244,15 @@ def sens_rotation(liste_des_joueurs, liste_pile, dernier_joueur, sens) :
     return prochain_joueur
     
 
-def testvictoire (joueur_courant, dico_joueur): 
-	main=dico_joueur[joueur_courant]
-	mainvide=[]
+def testvictoire (joueur_courant): 
+	main = dico_joueur[joueur_courant]
+	mainvide = []
 	if main == mainvide:
 		return True
 	else:
 		return False
 
-def récupérateurnum (liste_joueur, joueur_courant): #Récupère le numéro du joueur courant et retourne ce numéro (place dans la liste)
+def recuperateurnum (liste_joueur, joueur_courant): #Récupère le numéro du joueur courant et retourne ce numéro (place dans la liste)
 	i=0
 	while i < len(liste_joueur):
 		nomjoueur=liste_joueur[i]
@@ -259,44 +260,51 @@ def récupérateurnum (liste_joueur, joueur_courant): #Récupère le numéro du 
 		if nomjoueur == joueur_courant:
 			return i 
 
-def tourDeJeu (num_joueur, liste_joueur, dico_joueur, pile_de_jeu, paquet_melange):
-	main=dico_joueur[liste_joueur[num_joueur]]
-	if not jouable(main):
+def tourDeJeu (num_joueur, dico_des_joueurs, dico_cache_des_joueurs):
+	main = dico_joueur[liste_joueur[num_joueur]]
+	main_cache = dico_cache_joueur[liste_joueur[num_joueur]]
+	if not jouable(main_cache):
 		print("Aucune carte jouable")
-		indice=pile_de_jeu[-1]
-		if numero(indice)== 14:
+		derniere_carte_joue = pile_de_jeu[-1]
+		if numero(derniere_carte_joue)== 14:
 			if len(paquet_melange)< 4:
 				pioche_vide(paquet_melange, pile_de_jeu)
-				piocher(paquet_melange, main, 4)
+				piocher(paquet_melange, main, main_cache, 4)
 			else:
-				piocher(paquet_melange, main, 4)
+				piocher(paquet_melange, main, main_cache, 4)
 		
-		if numero(indice)== 10:
+		if numero(derniere_carte_joue)== 10:
 			if len(paquet_melange)< 2:
 				pioche_vide(paquet_melange, pile_de_jeu)
-				piocher(paquet_melange, main, 2)
+				piocher(paquet_melange, main, main_cache, 2)
 			else:
 				piocher(paquet_melange, main, 2)
 		else : 	
-			piocher(paquet_melange, main, 1)
+			piocher(paquet_melange, main, main_cache, 1)
 
-	elif jouable (main) : 
+	elif jouable(main_cache) : 
 		choix (main, main_cache)
 
 	if testvictoire(liste_joueur[num_joueur]):
 		nom=liste_joueur[num_joueur]
 		print("Victoire de:" +str(nom))
-		return 0
-	return dico_joueur, 
+		return True
+	 
 
 #========================================================================PROGRAMME PRINCIPAL========================================================================
 initialisation(paquet_melange)
 gestionjoueur()
-dernier_joueur = liste_joueur[0]
-joueur_courant = liste_joueur[2]
-num_joueur=récupérateurnum(liste_joueur, joueur_courant)
+dernier_joueur = liste_joueur[-1]
+x = False
 
-while testvictoire != True: #Tant que personne n'a gagné, le jeu continue.
-	tourDeJeu(0, liste_joueur, dico_joueur, pile_de_jeu, paquet_melange)
+while x != True: #Tant que personne n'a gagné, le jeu continue.
+    joueur_courant = sens_rotation(liste_joueur, pile_de_jeu, dernier_joueur, sens)
+    num_joueur_courant = recuperateurnum(liste_joueur, joueur_courant)
+    dernier_joueur = joueur_courant
+    print("Tour de : " + str(joueur_courant))
+    print("Dernière carte jouée : " + str(texte(pile_de_jeu[-1])))
+    x = tourDeJeu(num_joueur_courant, dico_joueur, dico_cache_joueur)
+
+print("Fin de la partie")
 
 
